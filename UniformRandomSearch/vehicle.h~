@@ -1,0 +1,25 @@
+#ifndef VEHICLE_H
+#define VEHICLE_H
+#include <vector>
+#include "types.h"
+using namespace std;
+
+class Vehicle
+{
+	private:
+		Orientation m_orientation;
+		char m_display;
+		vector<Coord> m_spacesoccupying;
+		bool m_escapable;
+	public:
+		Vehicle();
+		Vehicle(const char dis, const vector<Coord> occ, const bool esc, const Orientation orient);
+		bool isEscapable() const;
+		vector<Coord> getOccupying() const;
+		char getDisplay() const;
+		Orientation getOrientation() const;
+		int getSize() const;
+		int changeX(const short amt);
+		int changeY(const short amt);
+};
+#endif

@@ -1,0 +1,10 @@
+from board import Board
+b = Board()
+b.loadBoard("board1.txt")
+print b.getDisplay()
+vehicles = b.whatCanMove()
+
+for v in vehicles:
+  b.printMoveInformation(v)
+
+print b.isAWin()
