@@ -1,0 +1,1 @@
+("status" ("game" 0 0 11 100 90001 90000) ("Move") ("Piece" (0 1 5 8 0 81) (1 1 1 7 0 80) (2 1 8 7 0 80) (3 1 1 5 0 66) (4 0 8 2 0 80) (5 0 5 1 0 75)))("animations" ("add" 0) ("add" 1) ("add" 2) ("add" 3) ("add" 4) ("add" 5))("game-winner" 11 "Shell AI" 1 "White Attempted to make a Move which ended with itself in check!")

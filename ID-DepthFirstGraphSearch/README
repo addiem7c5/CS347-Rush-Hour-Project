@@ -2,10 +2,10 @@ I decided to write this program in Python, which turned out to be a faster
 choice to develop in. 
 
 To run it, open a Terminal and type:
-python puzzleproject2.py {boardname}
+python puzzleproject3.py {boardname}
 
 e.g. I want to open problem0.txt
-python puzzleproject2.py problem0.txt
+python puzzleproject3.py problem0.txt
 
 
 If somehow you mess up entering the file there, it will ask for it in the

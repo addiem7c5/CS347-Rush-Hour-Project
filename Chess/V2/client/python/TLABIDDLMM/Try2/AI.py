@@ -1,0 +1,244 @@
+#-*-python-*-
+#ADDIE MARTIN
+#CS347
+#AI.py
+from BaseAI import BaseAI
+from GameObject import *
+from node import Node
+import random
+import os
+import time
+import sys
+import math
+
+WHITE = 0
+BLACK = 1
+LOWERCASE = 0
+UPPERCASE = 1
+
+###################################################################
+#Class: valToChild                                                #
+#Description: Connects a node to a logical heuristic/utility value#
+#             and depending on whether its a min node or a max    #
+#             node decides to use greater than or less than for   #
+#             __lt__ to be used in a sorting algorithm.           #
+##################################################################$
+class valToChild:
+  def __init__(self, v, c):
+    self.value = v
+    self.child = c
+  def __lt__(self, other):
+    if self.mm == 1:
+      return self.value > other.value
+  def __le__(self, other):
+    if self.mm == 1:
+      return self.value >= other.value 
+
+class AI(BaseAI):
+  """The class implementing gameplay logic."""
+  @staticmethod
+  def username():
+    return "Shell AI"
+
+  @staticmethod
+  def password():
+    return "password"
+
+
+  #Avg moves = 50. This gives little time at beginning and end, but alot in the middle.
+  def timeHeuristic(self, movenumber):
+    return -17.5 * math.cos(3.14159265/50.0 * float(movenumber/2)) + 18.0
+
+  #Builds a node based off of info from the server
+  def buildRootNode(self):
+    board = []
+    whiterookfile0moved = True
+    whiterookfile7moved = True
+    whitekingmoved = True
+    blackrookfile0moved = True
+    blackrookfile7moved = True
+    blackkingmoved = True
+    for i in range(0, 8):
+      temp = []
+      for j in range(0, 8):
+        temp.append('.')
+      board.append(temp)
+ 
+    for a in self.pieces:
+      if a.getOwner() == WHITE:
+        board[a.getRank() * -1 + 8][a.getFile() - 1] = chr(a.getType()).lower()
+        if a.getType() == ord('R'):
+          if a.getHasMoved() == False:
+            if a.getFile() == 1:
+              whiterookfile0moved = False
+            if a.getFile() == 8:
+              whiterookfile7moved = False
+        if a.getType() == ord('K'):
+          if a.getHasMoved() == False:
+            whitekingmoved = False
+      else:
+        board[a.getRank() * -1 + 8][a.getFile() - 1] = chr(a.getType())
+        if a.getType() == ord('R'):
+          if a.getHasMoved() == False:
+            if a.getFile() == 1:
+              blackrookfile0moved = False
+            if a.getFile() == 8:
+              blackrookfile7moved = False
+        if a.getType() == ord('K'):
+          if a.getHasMoved() == False:
+            blackkingmoved = False
+ 
+    newNode = Node(board, [whiterookfile0moved, whiterookfile7moved, whitekingmoved, \
+                           blackrookfile0moved, blackrookfile7moved, blackkingmoved],\
+                          self.playerID(), self.TurnsToStalemate())
+    
+    return newNode
+    
+  def init(self):
+    pass
+
+  def end(self):
+    pass
+  
+  #Time Limited Alpha Beta Depth Limited Minimax
+  def TLABDLMM(self, node, depth, alpha, beta, player, maxdepth, starttime, maxtime):
+    moves = []
+    if time.time() - starttime >= maxtime:
+      return None
+    if depth == 0:
+      #If black is the max player we want the good value for black
+      #to be returned to min.
+      if player == 1 and node.player == 1:
+        return -node.heuristicValue()
+      #If white is the max player we want the good value for white
+      #To be returned to min.
+      elif player == 1 and node.player == 0:
+        return node.heuristicValue()
+      #If white is the min player, we want the good value for black
+      #To be returned to max.
+      elif player == -1 and node.player == 0:
+        return -node.heuristicValue()
+      #If black is the min player, we want the good value for white
+      #To be returned to max.  
+      elif player == -1 and node.player == 1:
+        return node.heuristicValue()
+
+    children = node.getChildren()
+      
+    #Checkmate or stalemate due to 0 moves
+    if len(children) == 0:
+      #Checkmate For this player
+      if node.kingInCheck(1, 1, 1, 1):
+        return sys.maxint * player
+      #Checkmate For the other player
+      elif node.kingInCheck(1, 1, 1, 1, True):
+        return sys.maxint * player * -1
+      #Stalemate
+      else:
+        return 0
+    
+    if time.time() - starttime >= maxtime:
+      return None
+    #Stalemate via 3 repeated board states
+    if node.parent is not None:
+      pmove = node.parent.movethatgotmehere
+      cmove = node.movethatgotmehere
+      if node.parent.parent is not None:
+        ppmove = node.parent.parent.movethatgotmehere
+        if cmove is not None and ppmove is not None and cmove[0] == ppmove[2] and cmove[1] == ppmove[3]:
+          if node.parent.parent.parent is not None:
+            pppmove = node.parent.parent.parent.movethatgotmehere
+            if pmove is not None and pppmove is not None and pmove[0] == pppmove[2] and pmove[1] == pppmove[3]:
+              if node.parent.parent.parent.parent is not None:
+                ppppmove = node.parent.parent.parent.parent.movethatgotmehere
+                if ppmove is not None and ppppmove is not None and ppmove[0] == ppppmove[2] and ppmove[1] == ppppmove[3]:
+                  if node.parent.parent.parent.parent.parent is not None:
+                    pppppmove = node.parent.parent.parent.parent.parent.movethatgotmehere
+                    if pppmove is not None and pppppmove is not None and pppmove[0] == pppppmove[2] and pppmove[1] == pppppmove[3]:
+                      return 0
+
+    
+    flattenedboard = [item for sublist in node.board for item in sublist]
+    
+    #2 kings stalemate
+    if flattenedboard.count('.') == 62:
+      return 0
+
+    if flattenedboard.count('.') == 61:
+      if flattenedboard.count('b') == 1 or flattenedboard.count('n') == 1 or \
+         flattenedboard.count('B') == 1 or flattenedboard.count('N') == 1:
+            return 0
+    
+    if flattenedboard.count('.') == 60:
+      if flattenedboard.count('b') == 1 and flattenedboard.count('B') == 1:
+        if flattenedboard.index('b')%8 == flattenedboard.index('B')%8 and \
+           int(len(flattenedboard) / flattenedboard.index('b'))%2 == \
+           int(len(flattenedboard) / flattenedboard.index('B'))%2:
+            return 0
+
+    if node.turnstostalemate == 0:
+      return 0
+    
+    if time.time() - starttime >= maxtime:
+      return None
+
+    if player == 1:
+      for each in children:
+        if time.time() - starttime >= maxtime:
+          return None
+        newvalue = self.TLABDLMM(each, depth - 1, alpha, beta, player * -1, maxdepth, starttime, maxtime)
+        if newvalue == None:
+          return None
+        alpha = max(alpha, newvalue)
+        if depth == maxdepth:
+          if len(moves) == 0 or moves[0].value == newvalue:
+            moves.append(valToChild(alpha, each))
+          elif moves[0].value < alpha:
+            moves = []
+            moves.append(valToChild(alpha, each)) 
+        if beta <= alpha:
+          break
+      if depth == maxdepth:
+        return moves[random.randint(0, len(moves)-1)].child.movethatgotmehere
+      else:
+        return alpha
+    else:
+      for each in children:
+        if time.time() - starttime >= maxtime:
+          return None
+        newvalue = self.TLABDLMM(each, depth - 1, alpha, beta, player * -1, maxdepth, starttime, maxtime)
+        if newvalue == None:
+          return None
+        beta = min(beta, newvalue)
+        if beta <= alpha:
+          break
+    return beta
+
+  def run(self):
+    node = self.buildRootNode()
+   
+    #TLABIDDLMM, because this is where the iterativeness happens and time is started
+    #Time heuristic will probably fail at being a good heuristic, but sometimes not.
+    #But hey, it exists right?
+    starttime = time.time()
+    maxtime = self.timeHeuristic(self.turnNumber())
+    move = None
+    for a in range(1, 1000):
+      newmove = self.TLABDLMM(node, a, -sys.maxint, sys.maxint, 1, a, starttime, maxtime)
+      if newmove != None:
+        move = newmove
+      else:
+        break
+    print chr(ord('a') + move[1]) + str(move[0] * -1 + 8) + ' ' + chr(ord('a') + move[3]) + str(move[2] * -1 + 8)
+    
+    #Converts my data into data the server knows about
+    for a in self.pieces:
+      if move[0] * -1 + 8 == a.getRank() and move[1] + 1 == a.getFile():
+        if len(move) == 4:
+          a.move(move[3] + 1, move[2] * -1 + 8, 0)
+        elif len(move) == 5:
+          a.move(move[3] + 1, move[2] * -1 + 8, move[4])
+    return 1
+
+  def __init__(self, conn):
+      BaseAI.__init__(self, conn)

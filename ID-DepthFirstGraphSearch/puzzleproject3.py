@@ -18,14 +18,12 @@ if current.loadBoard(boardname) == 0:
 	print boardname, "does not exist!"
 else:
 	#Do the ID-DFGS Algorithm
-	print "We are going to do Iterative Deepening", 
-        print "Depth First  Graph Search on", boardname
+	print "We are going to do an optimal Iterative Deepening", 
+        print "Depth First Graph Search on", boardname
 	current.printDisplay()
 	elapsedtime = time.time()
 	stackofmoves = []
-	checklisttime = 0
-	iterationlevel = 5
-	currentiteration = 0
+	iterationlevel = 0
 
 	#Initial Node
 	n = Node(current, None, 0)
@@ -40,13 +38,13 @@ else:
 		s = stackofmoves[-1]
 		
 		stackofmoves.pop()
-		if s.depth <= iterationlevel:
+		#See if the current nodes depth is less than the iteration level
+		#If it is, we can still expand
+		if s.depth < iterationlevel:
 			for a in s.state.whatCanMove():
 				n = Node(s.state.doAction(a), a, s.depth + 1)
 				#Check if the boards string rep is in the closed list
-				
-					
-						
+									
 				if n.getStateBoardStringForHash() not in closedlist:
 					n.setParent(s)
 					s.addChild(n)

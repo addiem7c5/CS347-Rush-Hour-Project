@@ -17,6 +17,7 @@ class Node:
 	#              [[Display character, [Coordinates occupied], Whether or not
 	#                it's the escape car, the vehicle's orientation], and the
 	#				 direction the car can go]
+        #             and the Node's depth on the tree.
 	# Description: Initializes a new Node object, sets its parent initally to
 	#              none, and children to an empty list.
 		self.state = board
@@ -28,8 +29,8 @@ class Node:
 	def __eq__(self, b):
 	# Function: __eq__
 	# Parameters: The Instance of Node, and another Node
-	# Description: Takes another node, and sees if its state is equal to the
-	#              state of this Instance.
+	# Description: Takes another node, and sees if its state and depth are
+	#              equal to the state and depth of this Instance.
 	# Returns: 1 if the states are equal, 0 if not
 		if self.state == b.state and self.depth == b.depth:
 			return 1

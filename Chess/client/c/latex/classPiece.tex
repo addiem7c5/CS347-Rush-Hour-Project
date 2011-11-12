@@ -1,0 +1,81 @@
+\hypertarget{classPiece}{
+\section{Piece Class Reference}
+\label{classPiece}\index{Piece@{Piece}}
+}
+
+
+A chess piece.  
+
+
+
+
+{\ttfamily \#include $<$Piece.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPiece_ab172144e53910f4a3310ee11599965da}{
+{\bfseries Piece} (\hyperlink{struct__Piece}{\_\-Piece} $\ast$ptr=NULL)}
+\label{classPiece_ab172144e53910f4a3310ee11599965da}
+
+\item 
+\hypertarget{classPiece_a04789ec49b960e9d3443e59725fcf186}{
+int \hyperlink{classPiece_a04789ec49b960e9d3443e59725fcf186}{id} ()}
+\label{classPiece_a04789ec49b960e9d3443e59725fcf186}
+
+\begin{DoxyCompactList}\small\item\em Unique Identifier. \item\end{DoxyCompactList}\item 
+\hypertarget{classPiece_a9b34b0c38397e1e1cb10b833295731b7}{
+int \hyperlink{classPiece_a9b34b0c38397e1e1cb10b833295731b7}{owner} ()}
+\label{classPiece_a9b34b0c38397e1e1cb10b833295731b7}
+
+\begin{DoxyCompactList}\small\item\em The owner of the piece. \item\end{DoxyCompactList}\item 
+\hypertarget{classPiece_a0b8109f3dad5d577532f65dce6e44345}{
+int \hyperlink{classPiece_a0b8109f3dad5d577532f65dce6e44345}{file} ()}
+\label{classPiece_a0b8109f3dad5d577532f65dce6e44345}
+
+\begin{DoxyCompactList}\small\item\em The letter this piece is at (1-\/8). \item\end{DoxyCompactList}\item 
+\hypertarget{classPiece_a42669c948d916a0356a34020a2f94d34}{
+int \hyperlink{classPiece_a42669c948d916a0356a34020a2f94d34}{rank} ()}
+\label{classPiece_a42669c948d916a0356a34020a2f94d34}
+
+\begin{DoxyCompactList}\small\item\em The number this piece is at (1-\/8). \item\end{DoxyCompactList}\item 
+\hypertarget{classPiece_ac1b255f3267c459f418a45a7cd580af8}{
+int \hyperlink{classPiece_ac1b255f3267c459f418a45a7cd580af8}{hasMoved} ()}
+\label{classPiece_ac1b255f3267c459f418a45a7cd580af8}
+
+\begin{DoxyCompactList}\small\item\em 1=has moved, 0=has not moved \item\end{DoxyCompactList}\item 
+\hypertarget{classPiece_a342bcc878214b55d621b78ac8b2a50ab}{
+int \hyperlink{classPiece_a342bcc878214b55d621b78ac8b2a50ab}{type} ()}
+\label{classPiece_a342bcc878214b55d621b78ac8b2a50ab}
+
+\begin{DoxyCompactList}\small\item\em The letter that describes this piece's type. K=King, Q=Queen, B=Bishop, N=Knight, R=Rook, P=Pawn. \item\end{DoxyCompactList}\item 
+\hypertarget{classPiece_a4bd26bbbbaccbab5b554bffd216ba865}{
+int {\bfseries move} (int file, int rank, int type)}
+\label{classPiece_a4bd26bbbbaccbab5b554bffd216ba865}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPiece_a609dfb34f65a8da07017f3246f8876bf}{
+void $\ast$ {\bfseries ptr}}
+\label{classPiece_a609dfb34f65a8da07017f3246f8876bf}
+
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classPiece_aeec19f074c6b0319987512d443968ca1}{
+std::ostream \& {\bfseries operator$<$$<$} (std::ostream \&stream, \hyperlink{classPiece}{Piece} ob)}
+\label{classPiece_aeec19f074c6b0319987512d443968ca1}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A chess piece. 
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+Piece.h\item 
+Piece.cpp\end{DoxyCompactItemize}

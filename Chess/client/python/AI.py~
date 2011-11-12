@@ -1,0 +1,49 @@
+#-*-python-*-
+from BaseAI import BaseAI
+from GameObject import *
+
+class Node:
+   piece = None
+   move = None
+   
+class AI(BaseAI):
+  """The class implementing gameplay logic."""
+  board = []
+  @staticmethod
+  def username():
+    return "Shell AI"
+
+  @staticmethod
+  def password():
+    return "password"
+
+  def init(self):
+    temp = []
+    for i in range(1, 9):
+      for j in range(1, 9):
+        temp.append('.')
+      self.board.append(temp)
+      temp = []
+
+  def end(self):
+    pass
+
+  def run(self):
+     mypieces = []
+     for a in BaseAI.pieces:
+        if a.getType() == 80:
+          print a.getRank()
+          print a.getFile()
+          self.board[a.getRank()-1][a.getFile()-1] = 'P'
+          string = ""
+          for r in self.board:
+            for f in r:
+              string += f
+            string += '\n'
+          print string
+     
+      
+     return 1
+
+  def __init__(self, conn):
+      BaseAI.__init__(self, conn)
